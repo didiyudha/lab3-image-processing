@@ -15,12 +15,10 @@ subplot(1,2,2),imshow(S1,[]),title('Fourier Spectrum of Noisy Image');
 % H3 = notch('ideal', PQ(1), PQ(2), 19, 65, 31);
 % H4 = notch('ideal', PQ(1), PQ(2), 19, -65, -31);
 
-H1 = notch('ideal', PQ(1), PQ(2), 19, -65, 31);
-H2 = notch('ideal', PQ(1), PQ(2), 19, 65, -31);
-H3 = notch('ideal', PQ(1), PQ(2), 19, 65, 31);
-H4 = notch('ideal', PQ(1), PQ(2), 19, -65, -31);
-
-
+H1 = notch('gaussian', PQ(1), PQ(2), 20, -65, 31);
+H2 = notch('gaussian', PQ(1), PQ(2), 20, 65, -31);
+H3 = notch('gaussian', PQ(1), PQ(2), 20, 65, 31);
+H4 = notch('gaussian', PQ(1), PQ(2), 20, -65, -31);
 
 FS_football = F.*H1.*H2.*H3.*H4;
 

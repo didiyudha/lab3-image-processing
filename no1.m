@@ -18,7 +18,7 @@ subplot(1, 3, 3), imshow(S1,[]), title('Fourier Spectrum After Scaling');
 
 PQ = paddedsize(size(I_Fasilkom_Gray));
  
-% membuat Butterworth ?lowpass? filter
+% membuat Butterworth lowpass filter
 D0 = 0.05*PQ(1);
 H = lpfilter('btw', PQ(1), PQ(2), D0);
 
@@ -30,7 +30,7 @@ LPFS = H.*F;
 
 % convert ke domain spasial 
 LPF = real(ifft2(LPFS)); 
-LPF=LPF(1:size(I_RGB,1), 1:size(I_RGB,2));
+LPF=LPF(1:size(I_Fasilkom_Gray,1), 1:size(I_Fasilkom_Gray,2));
 
 % % Menampilkan fourier spectrum
 Fc=fftshift(F);
@@ -42,7 +42,7 @@ subplot(1,2,1),imshow(LPF, []),title('BLPF');
 subplot(1,2,2),imshow(S1,[]),title('Fourier Spectrum of Image');
 
 %% Tampilkan hasil HLPF dan Fourier spectrum dari citra hasil HLPF
-PQ = paddedsize(size(I_RGB));
+PQ = paddedsize(size(I_Fasilkom_Gray));
 
 
 % membuat Butterworth lowpass filter
@@ -50,14 +50,14 @@ D0 = 0.05*PQ(1);
 H = hpfilter('btw', PQ(1), PQ(2), D0);
 
 % menghitung DFT citra
-F=fft2(double(I_RGB),size(H,1),size(H,2));
+F=fft2(double(I_Fasilkom_Gray),size(H,1),size(H,2));
 
 % Apply highpass filter
 HPFS = H.*F;
 
 % Convert ke domain spasial 
 HPF=real(ifft2(HPFS)); 
-HPF=HPF(1:size(I_RGB,1), 1:size(I_RGB));
+HPF=HPF(1:size(I_Fasilkom_Gray,1), 1:size(I_Fasilkom_Gray));
 
 % Menampilkan fourier spectrum
 Fc=fftshift(F);

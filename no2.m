@@ -4,32 +4,14 @@ clear;
 kapal_asli = imread('images/kapal.jpg');
 kapal_noisy = imread('images/kapal_noisy.jpg');
 
-R = kapal_noisy(:,:,1);
-G = kapal_noisy(:,:,2);
-B = kapal_noisy(:,:,3);
+I2 = imcrop(kapal_noisy,[0 100 100 100]);
+imhist(I2);
 
-medianFilterImage(:,:,1) = medfilt3(R);
-medianFilterImage(:,:,2) = medfilt3(G);
-medianFilterImage(:,:,3) = medfilt3(B);
+imgdob = im2double(kapal_asli);
+noisyimg = imgdob + randg(1,size(imgdob)) .* 0.15;
+noisyimg(noisyimg< 0) = 0;
+noisyimg(noisyimg> 1) = 1;
+figure,imshow(imgdob);
 
-medianFilterImage1(:,:,1) = medfilt3(medianFilterImage(:,:,1));
-medianFilterImage2(:,:,2) = medfilt3(medianFilterImage(:,:,2));
-medianFilterImage3(:,:,3) = medfilt3(medianFilterImage(:,:,3));
-
-medianFilterImageX(:,:,1) = medfilt3(medianFilterImage1(:,:,1));
-medianFilterImageX(:,:,2) = medfilt3(medianFilterImage2(:,:,2));
-medianFilterImageX(:,:,3) = medfilt3(medianFilterImage3(:,:,3));
-
-medianFilterImageY(:,:,1) = medfilt3(medianFilterImageX(:,:,1));
-medianFilterImageY(:,:,2) = medfilt3(medianFilterImageX(:,:,2));
-medianFilterImageY(:,:,3) = medfilt3(medianFilterImageX(:,:,3));
-
-medianFilterImageZ(:,:,1) = medfilt3(medianFilterImageY(:,:,1));
-medianFilterImageZ(:,:,2) = medfilt3(medianFilterImageY(:,:,2));
-medianFilterImageZ(:,:,3) = medfilt3(medianFilterImageY(:,:,3));
-
-subplot(1, 2, 1), imshow(kapal_noisy), title('Kapal Noisy');
-subplot(1, 2, 2), imshow(medianFilterImageZ), title('Median Filter');
-
-[peaksnr, snr] = psnr(medianFilterImageZ, kapal_asli)
-err = immse(medianFilterImageZ, kapal_asli)
+[peaksnr, snr] = psnr(imgdob, double(kapal_asli))
+err = immse(imgdob, double(kapal_asli))
