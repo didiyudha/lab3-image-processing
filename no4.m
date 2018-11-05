@@ -3,14 +3,12 @@ clear;
 
 I = imread('images/Opening_original.jpg');
 I_GRAY = rgb2gray(I);
+IBW = imbinarize(I_GRAY);
 
 se = strel(ones(10, 1));
-bw2 = imerode(I_GRAY, se);
-bw3 = imdilate(bw2, se);
-bw3 = imopen(I_GRAY, se);
-marker = imerode(I_GRAY, se);
-mask = I_GRAY;
+marker = imerode(IBW, se);
+mask = IBW;
 characters = imreconstruct(marker, mask);
-imshow(characters);
 
-
+subplot(1, 2, 1), imshow(I), title('Original Image');
+subplot(1, 2, 2), imshow(characters), title('After Morphology Process');

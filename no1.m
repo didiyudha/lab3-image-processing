@@ -16,56 +16,22 @@ subplot(1, 3, 3), imshow(S1,[]), title('Fourier Spectrum After Scaling');
 
 %% Tampilkan hasil BLPF dan Fourier spectrum dari citra hasil BLPF
 
-PQ = paddedsize(size(I_Fasilkom_Gray));
- 
-% membuat Butterworth lowpass filter
-D0 = 0.05*PQ(1);
-H = lpfilter('btw', PQ(1), PQ(2), D0);
+[LPF1, S1] = blpf(I_Fasilkom_Gray, 0.05);
+[LPF2, S2] = blpf(I_Fasilkom_Gray, 0.1);
 
-% menghitung DFT citra 
-F=fft2(double(I_RGB),size(H,1),size(H,2));
-
-% Apply lowpass filter 
-LPFS = H.*F;
-
-% convert ke domain spasial 
-LPF = real(ifft2(LPFS)); 
-LPF=LPF(1:size(I_Fasilkom_Gray,1), 1:size(I_Fasilkom_Gray,2));
-
-% % Menampilkan fourier spectrum
-Fc=fftshift(F);
-Fcf=fftshift(LPFS); 
-S1=log(1+abs(Fc));
-S2=log(1+abs(Fcf));
-
-subplot(1,2,1),imshow(LPF, []),title('BLPF');
-subplot(1,2,2),imshow(S1,[]),title('Fourier Spectrum of Image');
+figure
+subplot(2,2,1),imshow(LPF1, []),title('BLPF 1');
+subplot(2,2,2),imshow(S1,[]),title('Fourier Spectrum D0 = 0.05');
+subplot(2,2,3),imshow(LPF2, []),title('BLPF 2');
+subplot(2,2,4),imshow(S2,[]),title('Fourier Spectrum D0 = 0.1');
 
 %% Tampilkan hasil HLPF dan Fourier spectrum dari citra hasil HLPF
-PQ = paddedsize(size(I_Fasilkom_Gray));
 
+[HPF1, SPF1] = bhpf(I_Fasilkom_Gray, 0.01);
+[HPF2, SPF2] = bhpf(I_Fasilkom_Gray, 0.5);
 
-% membuat Butterworth lowpass filter
-D0 = 0.05*PQ(1);
-H = hpfilter('btw', PQ(1), PQ(2), D0);
-
-% menghitung DFT citra
-F=fft2(double(I_Fasilkom_Gray),size(H,1),size(H,2));
-
-% Apply highpass filter
-HPFS = H.*F;
-
-% Convert ke domain spasial 
-HPF=real(ifft2(HPFS)); 
-HPF=HPF(1:size(I_Fasilkom_Gray,1), 1:size(I_Fasilkom_Gray));
-
-% Menampilkan fourier spectrum
-Fc=fftshift(F);
-Fcf=fftshift(HPFS);
-
-% fungsi abs untuk menghitung magnitude
-S1=log(1+abs(Fc));
-S2=log(1+abs(Fcf));
-
-subplot(1,2,1),imshow(HPF, []),title('BHPF');
-subplot(1,2,2),imshow(S1,[]),title('Fourier Spectrum of Image');
+figure
+subplot(2,2,1),imshow(HPF1, []),title('BHPF 1');
+subplot(2,2,2),imshow(SPF1,[]),title('Fourier Spectrum D0 = 0.05');
+subplot(2,2,3),imshow(HPF2, []),title('BHPF 2');
+subplot(2,2,4),imshow(SPF2,[]),title('Fourier Spectrum D0 = 0.1');
